@@ -16,5 +16,6 @@ public interface TraderBeanRemote {
 	List<Ebonddata> filteredBond(List<String> filterParameter);
 	List<Userbonddata> userBondSelection(String userSpcificData);
 	List<Double> calculatorApplicationProgramme(List<String> input);
+	void addToUserBondData(List<String> tradeData);
 
 }

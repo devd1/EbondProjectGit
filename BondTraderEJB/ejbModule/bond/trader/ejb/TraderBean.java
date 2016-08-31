@@ -1,5 +1,6 @@
 package bond.trader.ejb;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,12 +13,14 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.swing.table.TableCellRenderer;
 
 import org.jboss.security.auth.spi.Users.User;
 
 
 import bond.trader.jpa.Ebonddata;
 import bond.trader.jpa.Userbonddata;
+import javafx.scene.chart.PieChart.Data;
 
 /**
  * Session Bean implementation class TraderBean
@@ -516,6 +519,42 @@ public class TraderBean implements TraderBeanRemote, TraderBeanLocal {
 		
 		return returnCalcData;
 
+	}
+	
+	
+	
+	public void addToUserBondData(List<String> tradeData){
+		
+		String sql4 = "SELECT p FROM Ebonddata AS p where p.isin like \'"+tradeData.get(0)+"\'";
+		TypedQuery<Ebonddata> query4 = em1.createQuery(sql4, Ebonddata.class);
+
+		Ebonddata choosenBond = query4.getSingleResult();
+		Userbonddata addData = new Userbonddata();
+		
+		addData.setOrganiation(choosenBond.getOrganization());
+		addData.setCurrency(choosenBond.getCurrency());
+		addData.setSector(choosenBond.getSector());
+		addData.setIsin(choosenBond.getIsin());
+		addData.setPrice(choosenBond.getPriceChange());
+		addData.setCreditRting(choosenBond.getCreditRating());
+		addData.setCouponPercent(choosenBond.getCouponPercent());
+		addData.setCouponPeriod(choosenBond.getCouponPeriod());
+		addData.setMaturity(choosenBond.getMaturityDateFormat());
+		addData.setSettlementDate(new Date(System.currentTimeMillis()));
+		addData.setQuantity(Integer.parseInt(tradeData.get(2)));
+		List<String> dataForTrade = new ArrayList<>();
+		dataForTrade.add(tradeData.get(0));
+		dataForTrade.add(tradeData.get(1));
+		dataForTrade.add(tradeData.get(3));
+		dataForTrade.add("0");
+		dataForTrade.add("0");
+		List<Double> dataForYieldCleanDirtyPrice = calculatorApplicationProgramme(dataForTrade);
+		addData.setYield(BigDecimal.valueOf(dataForYieldCleanDirtyPrice.get(0)));
+		addData.setCleanPrice(BigDecimal.valueOf(dataForYieldCleanDirtyPrice.get(1)));
+		addData.setDirtyPrice(BigDecimal.valueOf(dataForYieldCleanDirtyPrice.get(2)));
+		addData.setSettlementAmount(BigDecimal.valueOf(Integer.parseInt(tradeData.get(2))*(dataForYieldCleanDirtyPrice.get(1))));
+		em1.persist(addData);
+				
 	}
 
 }

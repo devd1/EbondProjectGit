@@ -88,19 +88,18 @@ public class BondResource {
 
 	}
 	
-//	@GET
-//	//@Consumes("text/json")
-//	@Produces("text/json")
-//	@Path("/trade")
-//	public void placeTrade(@QueryParam("tradeInput") String tradeInput) {
-//		System.out.println("Yo devd");
-//		List<String> filterInput = (Arrays.asList(tradeInput.split("_")));
-//		System.out.println("yo chandy");
-//		System.out.println(tradeInput);
-//
-//		List<Double> calculateBondData = bean1.calculatorApplicationProgramme(filterInput);
-//		System.out.println(calculateBondData);
-//		return calculateBondData;
+	@GET
+	//@Consumes("text/json")
+	@Produces("text/json")
+	@Path("/trade")
+	public void placeTrade(@QueryParam("tradeInput") String tradeInput) {
+		System.out.println("Yo devd");
+		List<String> filterInput = (Arrays.asList(tradeInput.split("_")));
+		System.out.println("yo chandy");
+		System.out.println(tradeInput);
+
+		bean1.addToUserBondData(filterInput);
+		
 
 	}
 	
