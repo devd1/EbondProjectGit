@@ -3,6 +3,9 @@ package bond.trader.jpa;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 /**
@@ -198,6 +201,111 @@ public class Ebonddata implements Serializable {
 
 	public void setYield(BigDecimal yield) {
 		this.yield = yield;
+	}
+	
+	//---------------------------------------- added to ebondData
+	//-----------------------------------------------------------------------------------------------------------
+	//-----------------------------------------
+	
+	
+	public double getCouponPercentDouble() {
+		return this.couponPercent.doubleValue();
+	}
+
+	public void setCouponPercentDouble(double couponPercent) {
+		this.couponPercent = BigDecimal.valueOf(couponPercent);
+	}
+
+	public double getFaceValueDouble() {
+		return this.faceValue.doubleValue();
+	}
+
+	public void setFaceValueDouble(double faceValue) {
+		this.faceValue = BigDecimal.valueOf(faceValue);
+	}
+
+	public double getHighDouble() {
+		return this.high.doubleValue();
+	}
+
+	public void setHighDouble(double high) {
+		this.high = BigDecimal.valueOf(high);
+	}
+	
+	public Date getIssueDateFormat() {
+		return getDateFromString(this.issueDate);
+	}
+	public void setIssueDateFormat(Date issueDate) {
+		this.issueDate = getStringFromDate(issueDate);
+	}
+
+	public double getLowDouble() {
+		return this.low.doubleValue();
+	}
+
+	public void setLowDouble(double low) {
+		this.low = BigDecimal.valueOf(low);
+	}
+
+	public Date getMaturityDateFormat() {
+		return getDateFromString(this.maturity);
+	}
+	public void setMaturityDateFormat(Date maturity) {
+		this.maturity = getStringFromDate(maturity);
+	}
+	public double getPiece_SizeDouble() {
+		return this.piece_Size.doubleValue();
+	}
+
+	public void setPiece_SizeDouble(double piece_Size) {
+		this.piece_Size = BigDecimal.valueOf(piece_Size);
+	}
+
+	public double getPriceChangeDouble() {
+		return this.priceChange.doubleValue();
+	}
+
+	public void setPriceChangeDouble(double priceChange) {
+		this.priceChange = BigDecimal.valueOf(priceChange);
+	}
+	
+	public Date getSettlementDateFormat() {
+		return getDateFromString(this.settlementDate);
+	}
+
+	public void setSettlementDateFormat(Date settlementDate) {
+		this.settlementDate = getStringFromDate(settlementDate);
+	}
+
+	public  double getYieldDouble() {
+		return this.yield.doubleValue();
+	}
+
+	public void setYieldDouble(double yield) {
+		this.yield = BigDecimal.valueOf(yield);
+	}
+
+	public static Date getDateFromString(String stringDate) {
+
+		String pattern = "dd/MM/yyyy";
+		SimpleDateFormat format = new SimpleDateFormat(pattern);
+		Date date = null;
+
+		try {
+			date = format.parse(stringDate);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return date;
+	}
+
+	public static String getStringFromDate(Date date) {
+
+		String pattern = "dd/MM/yyyy";
+		SimpleDateFormat format = new SimpleDateFormat(pattern);
+		return format.format(date);
+		
+
 	}
 
 }
