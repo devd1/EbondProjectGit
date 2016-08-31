@@ -15,6 +15,7 @@ public interface TraderBeanLocal {
 	List<Ebonddata> viewSpecificbonds2(String in);
 	List<Ebonddata> filteredBond(List<String> filterParameter);
 	List<Userbonddata> userBondSelection(String userSpcificData);
+	List<Double> calculatorApplicationProgramme(List<String> input);
 
 
 }

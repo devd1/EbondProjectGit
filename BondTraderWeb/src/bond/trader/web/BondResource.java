@@ -19,6 +19,7 @@ import javax.ws.rs.QueryParam;
 
 import bond.trader.ejb.TraderBeanLocal;
 import bond.trader.jpa.Ebonddata;
+import bond.trader.jpa.Userbonddata;
 
 @Path("/bond007")
 public class BondResource {
@@ -64,16 +65,46 @@ public class BondResource {
 	@Produces("text/json")
 	@Path("/filter")
 	public List<Ebonddata> putFilterParameters(@QueryParam("stringInput") String stringInput) {
-		System.out.println("Yo devd");
 		List<String> filterInput = (Arrays.asList(stringInput.split("_")));
-		System.out.println("yo chandy");
-		System.out.println(stringInput);
 
 		List<Ebonddata> filterBondData = bean1.filteredBond(filterInput);
-		System.out.println(filterBondData);
 		return filterBondData;
 
 	}
+	
+	@GET
+	//@Consumes("text/json")
+	@Produces("text/json")
+	@Path("/calc")
+	public List<Double> calculatorApp(@QueryParam("calcInput") String calcInput) {
+		System.out.println("Yo devd");
+		List<String> filterInput = (Arrays.asList(calcInput.split("_")));
+		System.out.println("yo chandy");
+		System.out.println(calcInput);
+
+		List<Double> calculateBondData = bean1.calculatorApplicationProgramme(filterInput);
+		System.out.println(calculateBondData);
+		return calculateBondData;
+
+	}
+	
+//	@GET
+//	//@Consumes("text/json")
+//	@Produces("text/json")
+//	@Path("/trade")
+//	public void placeTrade(@QueryParam("tradeInput") String tradeInput) {
+//		System.out.println("Yo devd");
+//		List<String> filterInput = (Arrays.asList(tradeInput.split("_")));
+//		System.out.println("yo chandy");
+//		System.out.println(tradeInput);
+//
+//		List<Double> calculateBondData = bean1.calculatorApplicationProgramme(filterInput);
+//		System.out.println(calculateBondData);
+//		return calculateBondData;
+
+	}
+	
+	
 
 }
 

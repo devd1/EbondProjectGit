@@ -248,11 +248,23 @@ public class Ebonddata implements Serializable {
 	}
 
 	public Date getMaturityDateFormat() {
+		String s =this.maturity;
+		String mm = s.substring(0, 2);
+		String dd = s.substring(3, 5);
+		String yyyy = s.substring(6, 10);
+		this.maturity = dd + "/" + mm + "/" + yyyy;
+		
 		return getDateFromString(this.maturity);
 	}
 	public void setMaturityDateFormat(Date maturity) {
-		this.maturity = getStringFromDate(maturity);
+		String s = getStringFromDate(maturity);
+		String dd = s.substring(0, 2);
+		String  mm = s.substring(3, 5);
+		String yyyy = s.substring(6, 10);
+		
+		this.maturity = mm + "/" + dd + "/" + yyyy;
 	}
+	
 	public double getPiece_SizeDouble() {
 		return this.piece_Size.doubleValue();
 	}
