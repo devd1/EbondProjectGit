@@ -9,7 +9,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.jboss.security.auth.spi.Users.User;
+
 import bond.trader.jpa.Ebonddata;
+import bond.trader.jpa.Userbonddata;
 
 
 /**
@@ -167,5 +170,14 @@ public class TraderBean implements TraderBeanRemote, TraderBeanLocal {
 		return lb4;
 		
 	}
+	
+	public List<Userbonddata> userBondSelection(String userSpcificData){
+		Userbonddata userData = new Userbonddata();
+		List<Userbonddata> userDataList;
+		userDataList =null;
+		
+		return userDataList;
+	}
+
 	
 }
