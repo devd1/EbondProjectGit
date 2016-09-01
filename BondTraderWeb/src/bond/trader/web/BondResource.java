@@ -53,7 +53,7 @@ public class BondResource {
 	@GET
 	@Produces("text/json")
 	@Path("/BJson")
-	public List<Ebonddata> getPersonName() {
+	public List<Ebonddata> getAllDataFromDatabase() {
 		String stringInput1 = "5_5_5_2";
 		List<String> filterInput = (Arrays.asList(stringInput1.split("_")));
 

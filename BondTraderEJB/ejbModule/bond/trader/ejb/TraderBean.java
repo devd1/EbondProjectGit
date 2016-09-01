@@ -555,7 +555,7 @@ public class TraderBean implements TraderBeanRemote, TraderBeanLocal {
 		addData.setCreditRting(choosenBond.getCreditRating());
 		addData.setCouponPercent(choosenBond.getCouponPercent());
 		addData.setCouponPeriod(choosenBond.getCouponPeriod());
-		addData.setMaturity(choosenBond.getMaturityDateFormat());
+		addData.setMaturity(choosenBond.getMaturity());
 		addData.setSettlementDate(choosenBond.getSettlementDate());
 		addData.setQuantity(Integer.parseInt(tradeData.get(2)));
 		List<String> dataForTrade = new ArrayList<>();

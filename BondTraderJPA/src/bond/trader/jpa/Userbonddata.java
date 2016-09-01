@@ -33,8 +33,9 @@ public class Userbonddata implements Serializable {
 
 	private String isin;
 
-	@Temporal(TemporalType.DATE)
-	private Date maturity;
+//	@Temporal(TemporalType.DATE)
+//	private Date maturity;
+	private String maturity;
 
 	private String organiation;
 
@@ -119,11 +120,19 @@ public class Userbonddata implements Serializable {
 		this.isin = isin;
 	}
 
-	public Date getMaturity() {
+//	public Date getMaturity() {
+//		return this.maturity;
+//	}
+//
+//	public void setMaturity(Date maturity) {
+//		this.maturity = maturity;
+//	}
+	
+	public String getMaturity() {
 		return this.maturity;
 	}
 
-	public void setMaturity(Date maturity) {
+	public void setMaturity(String maturity) {
 		this.maturity = maturity;
 	}
 
