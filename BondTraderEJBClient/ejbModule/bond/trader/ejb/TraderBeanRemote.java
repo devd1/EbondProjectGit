@@ -10,7 +10,7 @@ import bond.trader.jpa.Userbonddata;
 @Remote
 public interface TraderBeanRemote {
 	
-	List<Ebonddata> viewAllbonds();
+	List<Userbonddata> viewAllbonds();
 	List<Ebonddata> viewSpecificbonds(String in);
 	List<Ebonddata> viewSpecificbonds2(String in);
 	List<Ebonddata> filteredBond(List<String> filterParameter);

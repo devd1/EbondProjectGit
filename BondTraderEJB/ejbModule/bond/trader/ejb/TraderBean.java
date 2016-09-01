@@ -41,12 +41,12 @@ public class TraderBean implements TraderBeanRemote, TraderBeanLocal {
 	}
 
 	@Override
-	public List<Ebonddata> viewAllbonds() {
-		String sql1 = "SELECT p FROM Ebonddata AS p";
+	public List<Userbonddata> viewAllbonds() {
+		String sql1 = "SELECT p FROM Userbonddata AS p";
 		// System.out.println(sql1);
-		TypedQuery<Ebonddata> query1 = em1.createQuery(sql1, Ebonddata.class);
+		TypedQuery<Userbonddata> query1 = em1.createQuery(sql1, Userbonddata.class);
 
-		List<Ebonddata> lb1 = query1.getResultList();
+		List<Userbonddata> lb1 = query1.getResultList();
 
 		return lb1;
 	}
@@ -137,6 +137,9 @@ public class TraderBean implements TraderBeanRemote, TraderBeanLocal {
 		// couponpercent = Integer.parseInt((filterParameter.get(3)));
 
 		switch (Integer.parseInt((filterParameter.get(3)))) {
+		case 0:
+			queryForCouponpercent = ">= \'5\'";
+			break;
 		case 1:
 			queryForCouponpercent = "between \'4\' and \'5\'";
 			break;
@@ -149,7 +152,7 @@ public class TraderBean implements TraderBeanRemote, TraderBeanLocal {
 			break;
 
 		default:
-			queryForCouponpercent = ">= \'5\'";
+			queryForCouponpercent = "like \'%\'";
 			break;
 
 		}
@@ -370,14 +373,16 @@ public class TraderBean implements TraderBeanRemote, TraderBeanLocal {
 
 		double lastTradePrice = e.getPiece_SizeDouble();
 
-		double tolerance = 0.00001;
+		double tolerance = 0.0001;
 		double estimatedCleanPrice = 0;
 
 		double lowerYield = 0.0001;
 		double upperYield = 100;
 		double estimatedYield = (lowerYield + upperYield) / 2;
+		int iterations = 0 ;
+		int limit = 100;
 
-		while ((Math.abs(lastTradePrice - estimatedCleanPrice)) > tolerance) {
+		while ((Math.abs(lastTradePrice - estimatedCleanPrice)) > tolerance && iterations < limit) {
 			estimatedYield = (lowerYield + upperYield) / 2;
 			estimatedCleanPrice = calculateCleanPriceFromYield(estimatedYield, tradeDate, e);
 			if (estimatedCleanPrice > lastTradePrice) {
@@ -385,6 +390,7 @@ public class TraderBean implements TraderBeanRemote, TraderBeanLocal {
 			} else if (estimatedCleanPrice < lastTradePrice) {
 				upperYield = estimatedYield;
 			}
+			iterations++;
 		}
 		return estimatedYield;
 	}
@@ -404,8 +410,11 @@ public class TraderBean implements TraderBeanRemote, TraderBeanLocal {
 		double lowerYield = 0.0001;
 		double upperYield = 100;
 		double estimatedYield = (lowerYield + upperYield) / 2;
+		int iterations = 0 ;
+		int limit = 100;
 
-		while ((Math.abs(cleanPrice - estimatedCleanPrice)) > tolerance) {
+
+		while ((Math.abs(cleanPrice - estimatedCleanPrice)) > tolerance && iterations < limit) {
 			estimatedYield = (lowerYield + upperYield) / 2;
 			estimatedCleanPrice = calculateCleanPriceFromYield(estimatedYield, tradeDate, e);
 			if (estimatedCleanPrice > cleanPrice) {
@@ -413,6 +422,7 @@ public class TraderBean implements TraderBeanRemote, TraderBeanLocal {
 			} else if (estimatedCleanPrice < cleanPrice) {
 				upperYield = estimatedYield;
 			}
+			iterations++;
 		}
 		return estimatedYield;
 	}
@@ -426,14 +436,16 @@ public class TraderBean implements TraderBeanRemote, TraderBeanLocal {
 	public static double calculateYTMfromDirtyPrice(double dirtyPrice, Ebonddata e, Date tradeDate) {
 
 		double cleanPrice = dirtyPrice - calculateAccruedInterest(tradeDate, e);
-		double tolerance = 0.00001;
+		double tolerance = 0.0001;
 		double estimatedCleanPrice = 0;
 
 		double lowerYield = 0.0001;
 		double upperYield = 100;
 		double estimatedYield = (lowerYield + upperYield) / 2;
 
-		while ((Math.abs(cleanPrice - estimatedCleanPrice)) > tolerance) {
+		int iterations = 0;
+		int limit= 100;
+		while ((Math.abs(cleanPrice - estimatedCleanPrice)) > tolerance && iterations < limit) {
 			estimatedYield = (lowerYield + upperYield) / 2;
 			estimatedCleanPrice = calculateCleanPriceFromYield(estimatedYield, tradeDate, e);
 			if (estimatedCleanPrice > cleanPrice) {
@@ -441,6 +453,7 @@ public class TraderBean implements TraderBeanRemote, TraderBeanLocal {
 			} else if (estimatedCleanPrice < cleanPrice) {
 				upperYield = estimatedYield;
 			}
+			iterations++;
 		}
 		return estimatedYield;
 	}
@@ -530,17 +543,20 @@ public class TraderBean implements TraderBeanRemote, TraderBeanLocal {
 
 		Ebonddata choosenBond = query4.getSingleResult();
 		Userbonddata addData = new Userbonddata();
-		
+		Double yield,cleanPrice,dirtyPrice;
+		yield = Double.parseDouble(tradeData.get(3));
+		cleanPrice = Double.parseDouble(tradeData.get(4));
+		dirtyPrice = Double.parseDouble(tradeData.get(5));
 		addData.setOrganiation(choosenBond.getOrganization());
 		addData.setCurrency(choosenBond.getCurrency());
 		addData.setSector(choosenBond.getSector());
 		addData.setIsin(choosenBond.getIsin());
-		addData.setPrice(choosenBond.getPriceChange());
+//		addData.setPrice(choosenBond.getPriceChange());
 		addData.setCreditRting(choosenBond.getCreditRating());
 		addData.setCouponPercent(choosenBond.getCouponPercent());
 		addData.setCouponPeriod(choosenBond.getCouponPeriod());
 		addData.setMaturity(choosenBond.getMaturityDateFormat());
-		addData.setSettlementDate(new Date(System.currentTimeMillis()));
+		addData.setSettlementDate(choosenBond.getSettlementDate());
 		addData.setQuantity(Integer.parseInt(tradeData.get(2)));
 		List<String> dataForTrade = new ArrayList<>();
 		dataForTrade.add(tradeData.get(0));
@@ -549,11 +565,17 @@ public class TraderBean implements TraderBeanRemote, TraderBeanLocal {
 		dataForTrade.add("0");
 		dataForTrade.add("0");
 		List<Double> dataForYieldCleanDirtyPrice = calculatorApplicationProgramme(dataForTrade);
-		addData.setYield(BigDecimal.valueOf(dataForYieldCleanDirtyPrice.get(0)));
-		addData.setCleanPrice(BigDecimal.valueOf(dataForYieldCleanDirtyPrice.get(1)));
-		addData.setDirtyPrice(BigDecimal.valueOf(dataForYieldCleanDirtyPrice.get(2)));
+//		addData.setYield(BigDecimal.valueOf(dataForYieldCleanDirtyPrice.get(0)));
+//		addData.setCleanPrice(BigDecimal.valueOf(dataForYieldCleanDirtyPrice.get(1)));
+//		addData.setDirtyPrice(BigDecimal.valueOf(dataForYieldCleanDirtyPrice.get(2)));
+		addData.setYield(BigDecimal.valueOf(yield));
+		addData.setCleanPrice(BigDecimal.valueOf(cleanPrice));
+		addData.setDirtyPrice(BigDecimal.valueOf(dirtyPrice));
 		addData.setSettlementAmount(BigDecimal.valueOf(Integer.parseInt(tradeData.get(2))*(dataForYieldCleanDirtyPrice.get(1))));
+		System.out.println("reached persist");
 		em1.persist(addData);
+		System.out.println("persisted");
+
 				
 	}
 

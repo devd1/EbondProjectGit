@@ -17,6 +17,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
+import org.jboss.security.auth.spi.Users.User;
+
 import bond.trader.ejb.TraderBeanLocal;
 import bond.trader.jpa.Ebonddata;
 import bond.trader.jpa.Userbonddata;
@@ -61,7 +63,7 @@ public class BondResource {
 	}
 
 	@GET
-	//@Consumes("text/json")
+	// @Consumes("text/json")
 	@Produces("text/json")
 	@Path("/filter")
 	public List<Ebonddata> putFilterParameters(@QueryParam("stringInput") String stringInput) {
@@ -71,9 +73,9 @@ public class BondResource {
 		return filterBondData;
 
 	}
-	
+
 	@GET
-	//@Consumes("text/json")
+	// @Consumes("text/json")
 	@Produces("text/json")
 	@Path("/calc")
 	public List<Double> calculatorApp(@QueryParam("calcInput") String calcInput) {
@@ -87,23 +89,30 @@ public class BondResource {
 		return calculateBondData;
 
 	}
-	
+
 	@GET
 	//@Consumes("text/json")
 	@Produces("text/json")
 	@Path("/trade")
-	public void placeTrade(@QueryParam("tradeInput") String tradeInput) {
+	public String placeTrade(@QueryParam("tradeInput") String tradeInput) {
 		System.out.println("Yo devd");
 		List<String> filterInput = (Arrays.asList(tradeInput.split("_")));
 		System.out.println("yo chandy");
 		System.out.println(tradeInput);
 
 		bean1.addToUserBondData(filterInput);
-		
-
+		return "Trade Successful";
 	}
+
+	@GET
+	// @Consumes("text/json")
+	@Produces("text/json")
+	@Path("/userHistory")
+	public List<Userbonddata> getUserTradeHistory() {
 	
-	
+		List<Userbonddata> filterBondData = bean1.viewAllbonds();
+		return filterBondData;
+	}
 
 }
 

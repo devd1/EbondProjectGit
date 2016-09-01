@@ -38,16 +38,15 @@ public class Userbonddata implements Serializable {
 
 	private String organiation;
 
-	private BigDecimal price;
-
 	private int quantity;
 
 	private String sector;
 
 	private BigDecimal settlementAmount;
 
-	@Temporal(TemporalType.DATE)
-	private Date settlementDate;
+//	@Temporal(TemporalType.DATE)
+//	private Date settlementDate;
+	private String settlementDate;
 
 	private BigDecimal yield;
 
@@ -136,14 +135,6 @@ public class Userbonddata implements Serializable {
 		this.organiation = organiation;
 	}
 
-	public BigDecimal getPrice() {
-		return this.price;
-	}
-
-	public void setPrice(BigDecimal price) {
-		this.price = price;
-	}
-
 	public int getQuantity() {
 		return this.quantity;
 	}
@@ -168,11 +159,19 @@ public class Userbonddata implements Serializable {
 		this.settlementAmount = settlementAmount;
 	}
 
-	public Date getSettlementDate() {
+//	public Date getSettlementDate() {
+//		return this.settlementDate;
+//	}
+//
+//	public void setSettlementDate(Date settlementDate) {
+//		this.settlementDate = settlementDate;
+//	}
+	
+	public String getSettlementDate() {
 		return this.settlementDate;
 	}
 
-	public void setSettlementDate(Date settlementDate) {
+	public void setSettlementDate(String settlementDate) {
 		this.settlementDate = settlementDate;
 	}
 
